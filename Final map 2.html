@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Final map</title>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+<link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
+<script src="https://js.arcgis.com/4.23/"></script>
+<script>
+     require(["esri/config","esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer","esri/renderers/ClassBreaksRenderer"], function (esriConfig,Map, MapView, FeatureLayer, ClassBreaksRenderer) {
+
+esriConfig.apiKey = "AAPKa04dbc53c5b74ec3b2d2b527ea6fe50atfiDP3_7KfM3oAvxRmn8eiwnMvDfzabrFS3dPiJ5O8xwhLOmxMAnZnZKD3uS6URF";
+
+const map = new Map({
+  basemap: "arcgis-newspaper" // Basemap layer service
+});
+
+const view = new MapView({
+  map: map,
+  center: [-77.1945, 41.2033], // Longitude, latitude
+  zoom: 7, // Zoom level
+  container: "viewDiv" // Div element
+});
+const clusterConfig = {
+          type: "cluster",
+          clusterRadius: "100px",
+          // {cluster_count} is an aggregate field containing
+          // the number of features comprised by the cluster
+          popupTemplate: {
+            title: "Cluster summary",
+            content: "This cluster represents {cluster_count} earthquakes.",
+            fieldInfos: [{
+              fieldName: "cluster_count",
+              format: {
+                places: 0,
+                digitSeparator: true
+              }
+            }]
+          },
+          clusterMinSize: "24px",
+          clusterMaxSize: "60px",
+          labelingInfo: [{
+            deconflictionStrategy: "none",
+            labelExpressionInfo: {
+              expression: "Text($feature.cluster_count, '#,###')"
+            },
+            symbol: {
+              type: "text",
+              color: "#004a5d",
+              font: {
+                weight: "bold",
+                family: "Noto Sans",
+                size: "12px"
+              }
+            },
+            labelPlacement: "center-center",
+          }]
+        };
+
+const hospitalLocations = new FeatureLayer({ 
+    url: "https://services7.arcgis.com/2RQUR2voD4uhUeof/arcgis/rest/services/hospital/FeatureServer/0",
+    featureReduction: clusterConfig,
+    renderer: {
+            type: "simple",
+            field: "mag",
+            symbol: {
+              type: "simple-marker",
+              size: 4,
+              color: "#660000",
+            }
+          }
+
+        });
+ 
+
+map.add(hospitalLocations);
+
+});
+    
+  </script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

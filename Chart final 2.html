@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['County', 'Number of Hospitals'],
+          ['Allegheny',     25],
+          ['Montour',      4],
+          ['Beaver',  2],
+          ['Washington', 4],
+          ['Fayette', 2],
+          ['Somerset', 3],
+          ['WestMoreland', 6],
+          ['Indiana', 1],
+          ['Jefferson', 2],
+          ['Clearfield', 3],
+          ['Elk', 1],
+          ['Cambria', 3],
+          ['Butler', 2],
+          ['Lawrence', 1],
+          ['Mercer', 4],
+          ['Armstrong', 1],
+          ['Crawford', 2],
+          ['Venango', 1],
+          ['Warren', 2],
+          ['Erie', 7],
+          ['Blair', 5],
+          ['Huntingdon', 1],
+          ['Mckean', 2],
+          ['Centre', 2],
+          ['Phiadelphia', 27],
+          ['Chester', 9],
+          ['Montgomery', 14],
+          ['Center', 1],
+          ['Clearfeild', 1],
+          ['Potter', 1],
+          ['Bradford', 1],
+          ['Cumberland', 2],
+          ['Dauphin', 5],
+          ['Lebanon', 3],
+          ['Franklin', 3],
+          ['Adams', 1],
+          ['York', 6],
+          ['Lancaster', 5],
+          ['Lycoming', 3],
+          ['Schuykill', 3],
+          ['Northampton', 2],
+          ['Lehigh', 8],
+          ['Lackawanna', 3],
+          ['Luzerne', 6],
+          ['Bucks', 8],
+          ['Delaware', 3],
+          ['Berks', 6],
+          ['Wanye', 2],
+          ['Greene',    1]
+        ]);
+
+        var options = {
+          title: 'How many hospitals each county in Pa has'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="piechart" style="width: 900px; height: 500px;"></div>
+  </body>
+</html>

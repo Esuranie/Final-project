@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>6</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: whitesmoke;
+            font-family: Lato, sans-serif;
+            color: #0D0000;
+        }
+        header {
+            padding: 6px 10%;
+        }
+        h1 {
+            display: inline-block;
+            margin-right: 20px;
+            color: #001323;
+        }
+        h2 {
+            display: inline-block;
+            color: #001323;
+        }
+        #map {
+            width: 80%;
+            height: 540px;
+            margin: 10px auto;
+        }
+        footer {
+            padding: 6px 10%;
+            width: 80%;
+        }
+        p {
+            font-size: 1em;
+            color: #001323;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Hospital Saftey Rankings</h1>
+        <h2>Philadelphia area</h2>
+    </header>
+
+    <div id='map'></div>
+
+    <footer>
+        <p>Ethan Suranie</p>
+        <p>These are all the ranked hospitals within a 130 mile radius, if you would like to read up more on why a hospital was not ranked or more information on a hopital in question all used data was used from https://www.hospitalsafetygrade.org/</p>
+    </footer>
+
+    <script src="HospitalsRanked.geojson"></script>
+    <script>
+      var mymap = L.map('map',  { 
+          center: [40.4177867,-75.501793],
+          zoom: 7.5
+      });
+        
+       var mapLink = 
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>'; 
+       var tiles =     L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 20,
+            })
+tiles.addTo(mymap); 
+var Hospitalmarkers = L.geoJson(Hospitals, {
+
+  style: function(feature) {
+    var Rankings = feature.properties.Rankings;
+    if (Rankings === "A") {
+      return {
+        color: "#228B22"
+      }; 
+    }
+    else if (Rankings === "B") {
+      return {
+        color: "#000080"
+      };
+    } else if (Rankings === "C") {
+      return {
+        color: "#FFAE42"
+      };
+    } else {
+      return {
+        color: "#b33000"
+      }
+    }
+  },
+  
+
+  onEachFeature: function(feature, layer) {
+    var HospitalName = feature.properties.FACILITY_N
+    var CityName = feature.properties.CITY
+    var Cheifexc = feature.properties.CHIEF_EXEC
+    var Ranking = feature.properties.Rankings
+
+    var popupText = "<b>Name of Hospital:" +HospitalName+ "</b><br>"+"<b>City:" +CityName+ "</b><br>"+"<b>Chief Executive:" +Cheifexc+ "</b><br>"+"<b>Ranking:" +Ranking+ "</b><br>";
+
+    layer.bindPopup(popupText, {
+      closeButton: true,
+      offset: L.point(0, -20)
+    });
+    layer.on('click', function() {
+      layer.openPopup();
+    });
+  },
+
+  pointToLayer: function(feature, latlng) {
+    return L.circleMarker(latlng, {
+      radius: 8,
+    });
+  },
+}).addTo(mymap);
+
+
+    </script>
+    
+</body>
+
+</html>
